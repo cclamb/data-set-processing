@@ -16,7 +16,7 @@ IMAGE_HEIGHT = 128
 IMAGE_WIDTH = 128
 MAX_VALUE = 255
 
-ROOT = 'data/small-sets/BY_CLASS/'
+ROOT = 'data/mnist-sd19/BY_CLASS/'
 DIRECTORY = '30'
 FULL_DIRECTORY = 'data/mnist-sd19/BY_CLASS/30/'
 FILENAME = 'data/mnist-sd19/BY_CLASS/30/HSF_0_00001-00250.png'
@@ -71,6 +71,9 @@ def process_file(directory, filename):
     return images
 
 def process_images(directory, clazz):
+    global logger
+    logger = Logger('./log-' + str(os.getpid()))
+    logger.create()
     logger.write('starting...')
 
     tr, te, va = extract_files(directory)
@@ -86,19 +89,10 @@ def process_images(directory, clazz):
     validation_set = [image for sublist in vai for image in sublist]
 
     logger.write('finished.')
+    logger.close()
 
     return training_set, validation_set, testing_set, clazz
     #return ['training_set'], ['validation_set'], ['testing_set'], clazz
-
-def image_processor(directory, clazz, queue):
-    global logger
-    logger = Logger('./log-' + str(os.getpid()))
-    logger.create()
-    tr, va, te, clazz = process_images(directory, clazz)
-    logger.write('inserting into queue...')
-    queue.put((clazz, (tr, va, te)))
-    logger.write('inserted into queue and terminating process.')
-    logger.close()
 
 def package(results):
     tr_clazz_list, va_clazz_list, te_clazz_list = [], [], []
@@ -118,32 +112,18 @@ def package(results):
 
 
 def process():
-    result_queue = multiprocessing.Queue()
-    # clazzes = [o for o in os.listdir(ROOT) if os.path.isdir(ROOT + o)]
-    clazzes = [DIRECTORY]
-    jobs = [multiprocessing.Process(
-                target=image_processor,
-                args=(ROOT + clazz + '/', clazz, result_queue,)
-            )
-            for clazz in clazzes
-    ]
+    # clazzes = ['30', '31']
+    clazzes = [o for o in os.listdir(ROOT) if os.path.isdir(ROOT + o)]
+    ipdb.set_trace()
+    data = []
+    for c in clazzes:
+        tr, va, te, clazz = process_images(ROOT + c + '/', c)
+        data.append((clazz, (tr, va, te)))
 
-    print 'Starting jobs...'
-    for job in jobs:
-        job.start()
-
-    print 'Joining jobs...'
-    for job in jobs:
-        job.join()
-
-    print 'packaging results...'
-    return package([result_queue.get() for c in clazzes])
+    return package(data)
 
 if __name__ == '__main__':
     package = process()
-    # tr, va, te, clazz = process_images(ROOT + DIRECTORY + '/', '30')
-    # package = package([(clazz, (tr, va, te))])
-    # ipdb.set_trace()
     print 'dumping to archive.'
     with gzip.open(ARCHIVE_NAME, 'wb') as f:
         cPickle.dump(package, f)
