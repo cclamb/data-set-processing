@@ -1,6 +1,7 @@
 *.py[cod]
 *.pkl
 data/*
+log-*
 
 # C extensions
 *.so
