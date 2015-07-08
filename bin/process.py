@@ -5,6 +5,8 @@ __author__ = 'cclamb'
 import ipdb
 import os
 import multiprocessing
+import cPickle
+import gzip
 
 from PIL import Image
 
@@ -127,4 +129,6 @@ def process():
 if __name__ == '__main__':
     #results = process()
     tr, va, te, clazz = process_images(ROOT + DIRECTORY + '/', '30')
-    print package([(clazz, (tr, va, te))])
+    package = package([(clazz, (tr, va, te))])
+    with gzip.open('mnist-sd19.pkl', 'wb') as f:
+        cPickle.dump(package, f)
