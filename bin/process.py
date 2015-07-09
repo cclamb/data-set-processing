@@ -71,9 +71,9 @@ def package(results):
     tr_list, va_list, te_list = [], [], []
     for result in results:
         clazz, (tr, va, te) = result
-        tr_clazz_list.extend([hex(int(clazz, 16))] * len(tr))
-        va_clazz_list.extend([hex(int(clazz, 16))] * len(va))
-        te_clazz_list.extend([hex(int(clazz, 16))] * len(te))
+        tr_clazz_list.extend([int(clazz, 16)] * len(tr))
+        va_clazz_list.extend([int(clazz, 16)] * len(va))
+        te_clazz_list.extend([int(clazz, 16)] * len(te))
         tr_list.extend(tr)
         va_list.extend(va)
         te_list.extend(te)
