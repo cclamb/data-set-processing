@@ -7,6 +7,7 @@ import os
 import timeit
 import cPickle
 import gzip
+import utilities
 
 from bitarray import bitarray
 from PIL import Image
@@ -43,7 +44,7 @@ def process_file(directory, filename):
         data = []
         for i in xrange(IMAGE_HEIGHT):
             for j in xrange(IMAGE_WIDTH):
-                data.append(pixels[i, j] / MAX_VALUE)
+                data.append(pixels[j, i] / MAX_VALUE) # normalizing
         images.append(bitarray(data))
     return images
 
@@ -91,7 +92,6 @@ def process():
         tr, va, te, clazz = process_images(ROOT + c + '/', c)
         print '...elapsed time: %f' % (timeit.default_timer() - start_time)
         data.append((clazz, (tr, va, te)))
-
     return package(data)
 
 if __name__ == '__main__':
@@ -99,3 +99,5 @@ if __name__ == '__main__':
     print 'dumping to archive.'
     with gzip.open(ARCHIVE_NAME, 'wb') as f:
         cPickle.dump(package, f)
+    print 'dumping to HDF5'
+    utilities.create_hdf5_archive(package)

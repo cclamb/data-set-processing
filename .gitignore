@@ -1,6 +1,7 @@
 *.py[cod]
 *.pkl
 *.gz
+*.hdf5
 data/*
 log-*
 
