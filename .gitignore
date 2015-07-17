@@ -4,6 +4,7 @@
 *.hdf5
 data/*
 log-*
+archives
 
 # C extensions
 *.so

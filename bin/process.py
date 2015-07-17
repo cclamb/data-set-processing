@@ -44,7 +44,7 @@ def process_file(directory, filename):
         data = []
         for i in xrange(IMAGE_HEIGHT):
             for j in xrange(IMAGE_WIDTH):
-                # normalizing; (j,i) looks reversed as the crop is indexec in (x,y) space
+                # normalizing; (j,i) looks reversed as the crop is indexed in (x,y) space
                 # (i.e. (column, row))
                 # rather than the index ordering usually associated with a matrix (i.e. (row, column))
                 data.append(pixels[j, i] / MAX_VALUE)

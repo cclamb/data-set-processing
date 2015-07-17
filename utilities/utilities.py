@@ -62,7 +62,7 @@ def populate_groups(group, data):
         print 'creating dataset...'
         set = group.create_dataset(
             chr(key),
-            dtype='i8',
+            dtype='i1',
             compression='gzip',
             compression_opts=9,
             data=l
