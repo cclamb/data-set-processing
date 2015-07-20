@@ -14,7 +14,7 @@ import ipdb
 IMAGE_WIDTH = 128
 SET_SIZE = 10000
 SLEEP_DELAY = 0.1
-HDF5_FILENAME = 'mnist-sd19.hdf5'
+HDF5_FILENAME = 'nist-sd19.hdf5'
 
 
 def load(f):

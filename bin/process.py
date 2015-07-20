@@ -17,7 +17,7 @@ IMAGE_WIDTH = 128
 MAX_VALUE = 255
 
 ROOT = 'data/mnist-sd19/BY_CLASS/'
-ARCHIVE_NAME = 'mnist-sd19.pkl.gz'
+ARCHIVE_NAME = 'nist-sd19.pkl.gz'
 
 
 def extract_files(directory):
